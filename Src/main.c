@@ -1,4 +1,7 @@
 #include "stm32f7xx.h"
+#if __cplusplus > 199711L
+#define register // Deprecated in C++11.
+#endif           // #if __cplusplus > 199711L
 
 // Quick and dirty delay
 static void delay(unsigned int time) {
@@ -17,7 +20,7 @@ struct led_t {
 };
 
 #define INIT_LED(port, pin)                                                    \
-  {                                                                            \
+  (struct led_t) {                                                             \
     .base = GPIO##port, .ahen = RCC_AHB1ENR_GPIO##port##EN,                    \
     .moder_mask = GPIO_MODER_MODER##pin,                                       \
     .moder_bit = GPIO_MODER_MODER##pin##_0, .set_bit = GPIO_BSRR_BS_##pin,     \
