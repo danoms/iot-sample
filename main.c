@@ -61,13 +61,25 @@ int main(void) {
 
   int l = 0;
   int i = 0;
+  int goup = 1;
+
   while (1) {
-    l = i % LED_COUNT;
+    l = i % 3;
     // Reset the state of pin 13 to output low
     leds[l].base->BSRR = leds[l].set_bit;
     delay(100);
     leds[l].base->BSRR = leds[l].reset_bit;
-    i++;
+
+    if (i == 30)
+      goup = 0;
+    if (i == 0)
+      goup = 1;
+
+    if (goup) {
+      i++;
+    } else {
+      i--;
+    }
 
     /* leds[0].base->BSRR = leds[0].reset_bit; */
     /* GPIOC->BSRR = GPIO_BSRR_BR_7; */
