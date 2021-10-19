@@ -5,7 +5,38 @@ Download project and its submodules.
 #+begin_src sh
 git submodule update --init
 #+end_src
+To build project run make
+#+begin_src sh :results output
+make
+#+end_src
+
+#+RESULTS:
+: arm-none-eabi-gcc -c -specs=nosys.specs -Wall -Wextra -g -Wa,--defsym,CALL_ARM_SYSTEM_INIT=1 -D STM32F746xx -I Inc -I ./STMicroelectronics/cmsis_device_f7/Include/ -I ./STMicroelectronics/STM32CubeF7/Drivers/CMSIS/Include -mcpu=cortex-m7 -march=armv7e-m+fp.dp STMicroelectronics/cmsis_device_f7/Source/Templates/gcc/startup_stm32f746xx.s -o out/startup.o
+: arm-none-eabi-gcc -specs=nosys.specs -Wall -Wextra -g -Wa,--defsym,CALL_ARM_SYSTEM_INIT=1 -D STM32F746xx -I Inc -I ./STMicroelectronics/cmsis_device_f7/Include/ -I ./STMicroelectronics/STM32CubeF7/Drivers/CMSIS/Include -mcpu=cortex-m7 -march=armv7e-m+fp.dp -Wl,-LLinker,-T ./Linker/STM32F746NGHx_FLASH.ld Src/main.c Src/utils.c STMicroelectronics/cmsis_device_f7/Source/Templates/system_stm32f7xx.c out/startup.o -o out/elf
+: arm-none-eabi-objcopy -O binary out/elf out/bin
+
+Flash binary file to `smt32f46g-discovery` board with `stlink` tool.
+#+begin_src sh :results output :prologue "exec 2>&1" :epilogue ":"
+st-flash --connect-under-reset write out/bin 0x8000000
+#+end_src
+
+#+RESULTS:
+#+begin_example
+st-flash 1.7.0
+2021-10-19T23:15:53 INFO common.c: F7xx: 320 KiB SRAM, 1024 KiB flash in at least 2 KiB pages.
+file out/bin md5 checksum: c48c653277a5d09c1f8218a4ebfbf426, stlink checksum: 0x0003ae50
+2021-10-19T23:15:53 INFO common.c: Attempting to write 3760 (0xeb0) bytes to stm32 address: 134217728 (0x8000000)
+EraseFlash - Sector:0x0 Size:0x8000 2021-10-19T23:15:53 INFO common.c: Flash page at addr: 0x08000000 erased
+2021-10-19T23:15:53 INFO common.c: Finished erasing 1 pages of 32768 (0x8000) bytes
+2021-10-19T23:15:53 INFO common.c: Starting Flash write for F2/F4/F7/L4
+2021-10-19T23:15:53 INFO flash_loader.c: Successfully loaded flash loader in sram
+2021-10-19T23:15:53 INFO flash_loader.c: Clear DFSR
+2021-10-19T23:15:53 INFO common.c: enabling 32-bit flash writes
+2021-10-19T23:15:53 INFO common.c: Starting verification of write complete
+2021-10-19T23:15:53 INFO common.c: Flash written and verified! jolly good!
+#+end_example
 
 * Dependencies
 - https://github.com/STMicroelectronics/STM32CubeF7.git
 - https://github.com/STMicroelectronics/cmsis_device_f7.git
+- https://github.com/stlink-org/stlink.git
