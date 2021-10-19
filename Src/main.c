@@ -38,18 +38,11 @@ void init(struct led_t *led) {
 
 int main(void) {
   // Turn on the GPIOC peripheral
-  struct led_t leds[LED_COUNT];
-
-  /* SET_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOCEN); */
-  leds[0] = INIT_LED(C, 7);
-  leds[1] = INIT_LED(C, 6);
-  leds[2] = INIT_LED(G, 6);
-  leds[3] = INIT_LED(B, 4);
-  leds[4] = INIT_LED(G, 7);
-  leds[5] = INIT_LED(I, 0);
-  leds[6] = INIT_LED(H, 6);
-  leds[7] = INIT_LED(I, 3);
-  leds[8] = INIT_LED(I, 2);
+  struct led_t leds[LED_COUNT] = {
+      INIT_LED(C, 7), INIT_LED(C, 6), INIT_LED(G, 6),
+      INIT_LED(B, 4), INIT_LED(G, 7), INIT_LED(I, 0),
+      INIT_LED(H, 6), INIT_LED(I, 3), INIT_LED(I, 2),
+  };
 
   for (int i = 0; i < LED_COUNT; i++) {
     init(&leds[i]);
@@ -65,7 +58,7 @@ int main(void) {
   int l = 0;
   int i = 0;
   while (1) {
-    l = i % LED_COUNT;
+    l = i % 3;
     // Reset the state of pin 13 to output low
     leds[l].base->BSRR = leds[l].set_bit;
     delay(100);
