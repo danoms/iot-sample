@@ -1,0 +1,6 @@
+[submodule "STMicroelectronics/cmsis_device_f7"]
+	path = STMicroelectronics/cmsis_device_f7
+	url = https://github.com/STMicroelectronics/cmsis_device_f7.git
+[submodule "STMicroelectronics/STM32CubeF7"]
+	path = STMicroelectronics/STM32CubeF7
+	url = https://github.com/STMicroelectronics/STM32CubeF7.git

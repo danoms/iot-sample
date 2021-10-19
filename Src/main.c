@@ -1,7 +1,4 @@
 #include "stm32f7xx.h"
-#if __cplusplus > 199711L
-#define register // Deprecated in C++11.
-#endif           // #if __cplusplus > 199711L
 
 // Quick and dirty delay
 static void delay(unsigned int time) {
@@ -37,7 +34,6 @@ void init(struct led_t *led) {
 #define LED_COUNT 9
 
 int main(void) {
-  // Turn on the GPIOC peripheral
   struct led_t leds[LED_COUNT] = {
       INIT_LED(C, 7), INIT_LED(C, 6), INIT_LED(G, 6),
       INIT_LED(B, 4), INIT_LED(G, 7), INIT_LED(I, 0),
@@ -48,15 +44,9 @@ int main(void) {
     init(&leds[i]);
   }
 
-  // Put the pin in genreal purpose output mode
-  /* GPIOC->MODER &= ~(GPIO_MODER_MODER7); */
-  /* GPIOC->MODER |= GPIO_MODER_MODER7_0; */
-
-  /* GPIOC->MODER &= ~(GPIO_MODER_MODER6); */
-  /* GPIOC->MODER |= GPIO_MODER_MODER6_0; */
-
   int l = 0;
   int i = 0;
+
   while (1) {
     l = i % 3;
     // Reset the state of pin 13 to output low
@@ -64,18 +54,7 @@ int main(void) {
     delay(100);
     leds[l].base->BSRR = leds[l].reset_bit;
     i++;
-
-    /* leds[0].base->BSRR = leds[0].reset_bit; */
-    /* GPIOC->BSRR = GPIO_BSRR_BR_7; */
-    /* GPIOC->BSRR = GPIO_BSRR_BR_6; */
-
-    // Set the state of pin 13 to output high
-
-    /* leds[0].base->BSRR = leds[0].set_bit; */
-    /* GPIOC->BSRR = GPIO_BSRR_BS_7; */
-    /* GPIOC->BSRR = GPIO_BSRR_BS_6; */
   }
 
-  // Return 0 to satisfy compiler
   return 0;
 }
