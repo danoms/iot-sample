@@ -1,0 +1,11 @@
+#+TITLE: IoT sample
+
+* How to compile and run
+Download project and its submodules.
+#+begin_src sh
+git submodule update --init
+#+end_src
+
+* Dependencies
+- https://github.com/STMicroelectronics/STM32CubeF7.git
+- https://github.com/STMicroelectronics/cmsis_device_f7.git
