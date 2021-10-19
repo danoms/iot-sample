@@ -18,9 +18,9 @@ int main(void) {
 
     if (key_pressed())
       go_up ^= 1;
-
-    return 0;
   }
+
+  return 0;
 }
 
 int key_pressed() { return 0; }
