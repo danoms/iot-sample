@@ -40,3 +40,16 @@ void led_train(struct led_t leds[], int go_up) {
     i--;
   }
 }
+
+void init_uart() {
+  // enable clock for portC
+  RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
+
+  // set alternate function for PC6:D1, USART6:TX
+  GPIOC->MODER &= ~(GPIO_MODER_MODER6);
+  GPIOC->MODER |= GPIO_MODER_MODER6_1;
+
+  // set alternate function for PC7:D0, USART6:RX
+  GPIOC->MODER &= ~(GPIO_MODER_MODER7);
+  GPIOC->MODER |= GPIO_MODER_MODER7_1;
+}
