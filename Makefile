@@ -22,7 +22,7 @@ CXXFLAGS += -march=armv7e-m+fp.dp
 out/bin: out/elf
 	arm-none-eabi-objcopy -O binary $^ $@
 
-out/elf: Src/main.c ./STMicroelectronics/cmsis_device_f7/Source/Templates/system_stm32f7xx.c out/startup.o
+out/elf: Src/* ./STMicroelectronics/cmsis_device_f7/Source/Templates/system_stm32f7xx.c out/startup.o
 	arm-none-eabi-gcc $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) $^ -o $@
 
 out/startup.o: ./STMicroelectronics/cmsis_device_f7/Source/Templates/gcc/startup_stm32f746xx.s

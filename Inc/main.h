@@ -1,4 +1,19 @@
+#include "utils.h"
+
 #ifndef MAIN_H_
 #define MAIN_H_
+
+#define LED_COUNT 9
+
+#define LED(port, pin)                                                         \
+  (struct led_t) {                                                             \
+    .base = GPIO##port, .ahben_bit = RCC_AHB1ENR_GPIO##port##EN,               \
+    .moder_mask = GPIO_MODER_MODER##pin,                                       \
+    .moder_bit = GPIO_MODER_MODER##pin##_0, .set_bit = GPIO_BSRR_BS_##pin,     \
+    .reset_bit = GPIO_BSRR_BR_##pin                                            \
+  }
+
+int key_pressed();
+void led_train(struct led_t leds[], int go_up);
 
 #endif // MAIN_H_
