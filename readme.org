@@ -15,7 +15,7 @@ make
 : arm-none-eabi-gcc -specs=nosys.specs -Wall -Wextra -g -Wa,--defsym,CALL_ARM_SYSTEM_INIT=1 -D STM32F746xx -I Inc -I ./STMicroelectronics/cmsis_device_f7/Include/ -I ./STMicroelectronics/STM32CubeF7/Drivers/CMSIS/Include -mcpu=cortex-m7 -march=armv7e-m+fp.dp -Wl,-LLinker,-T ./Linker/STM32F746NGHx_FLASH.ld Src/main.c Src/utils.c STMicroelectronics/cmsis_device_f7/Source/Templates/system_stm32f7xx.c out/startup.o -o out/elf
 : arm-none-eabi-objcopy -O binary out/elf out/bin
 
-Flash binary file to `smt32f46g-discovery` board with `stlink` tool.
+Flash binary file to ~smt32f46g-discovery~ board with ~stlink~ tool.
 #+begin_src sh :results output :prologue "exec 2>&1" :epilogue ":"
 st-flash --connect-under-reset write out/bin 0x8000000
 #+end_src
