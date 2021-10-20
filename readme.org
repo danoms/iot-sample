@@ -5,8 +5,9 @@ Download project and its submodules.
 #+begin_src sh
 git submodule update --init
 #+end_src
-To build project run make
+To build project, download toolchain, add it to path, run make.
 #+begin_src sh :results output
+export PATH=$PATH:/path/to/toolchain/bin
 make
 #+end_src
 
@@ -37,6 +38,16 @@ EraseFlash - Sector:0x0 Size:0x8000 2021-10-19T23:15:53 INFO common.c: Flash pag
 #+end_example
 
 * Dependencies
+** stm32f74xx development files
 - https://github.com/STMicroelectronics/STM32CubeF7.git
 - https://github.com/STMicroelectronics/cmsis_device_f7.git
+
+** tools
 - https://github.com/stlink-org/stlink.git
+
+** documentation
+- https://www.st.com/content/ccc/resource/technical/document/user_manual/f0/14/c1/b9/95/6d/40/4d/DM00190424.pdf/files/DM00190424.pdf/jcr:content/translations/en.DM00190424.pdf
+- https://www.st.com/resource/en/reference_manual/dm00124865-stm32f75xxx-and-stm32f74xxx-advanced-arm-based-32-bit-mcus-stmicroelectronics.pdf
+
+** toolchain
+- https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.07/gcc-arm-none-eabi-10.3-2021.07-x86_64-linux.tar.bz2
