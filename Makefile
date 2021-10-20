@@ -21,6 +21,8 @@ CXXFLAGS += -I ./STMicroelectronics/STM32CubeF7/Drivers/CMSIS/Include
 CXXFLAGS += -mcpu=cortex-m7
 CXXFLAGS += -march=armv7e-m+fp.dp
 
+
+
 out/bin: out/elf
 	arm-none-eabi-objcopy -O binary $^ $@
 
@@ -28,6 +30,7 @@ out/elf: Src/* ./STMicroelectronics/cmsis_device_f7/Source/Templates/system_stm3
 	arm-none-eabi-gcc $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) $^ -o $@
 
 out/startup.o: ./STMicroelectronics/cmsis_device_f7/Source/Templates/gcc/startup_stm32f746xx.s
+	@mkdir -p $(@D)
 	arm-none-eabi-gcc -c $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
 
 .phony: clean mfd
