@@ -39,8 +39,11 @@ EraseFlash - Sector:0x0 Size:0x8000 2021-10-19T23:15:53 INFO common.c: Flash pag
 #+end_example
 
 ** Debug
+*** gdb
 Run ~st-util~ in one terminal, after flashing binary to board.
 Run ~arm-none-eabi-gdb~ in other terminal. ~.gdbinit~ file is located at the root of this repo.
+*** uart
+Set ~DEBUG~ flag in makefile, and build it. It will print debug information to uart. TX pin PC6:D1, RX pin PC7:D0.
 
 * Dependencies
 ** stm32f74xx development files
