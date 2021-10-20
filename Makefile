@@ -1,3 +1,5 @@
+CXXFLAGS += -D DEBUG
+
 CPPFLAGS += -specs=nosys.specs
 LDFLAGS += -Wl,-LLinker,-T ./Linker/STM32F746NGHx_FLASH.ld
 
@@ -28,6 +30,12 @@ out/elf: Src/* ./STMicroelectronics/cmsis_device_f7/Source/Templates/system_stm3
 out/startup.o: ./STMicroelectronics/cmsis_device_f7/Source/Templates/gcc/startup_stm32f746xx.s
 	arm-none-eabi-gcc -c $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
 
-.phony: clean
+.phony: clean mfd
 clean:
 	- rm -f out/*
+
+# make, flash, debug
+mfd:
+	make
+	st-flash --connect-under-reset write out/bin 0x8000000
+	st-util

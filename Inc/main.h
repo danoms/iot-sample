@@ -3,7 +3,13 @@
 #ifndef MAIN_H_
 #define MAIN_H_
 
-#define LED_COUNT 9
+#define UNUSED(x) (void)(x)
+
+#ifdef DEBUG
+#define LOG(msg...) printf(msg);
+#else
+#define LOG(msg...) ;
+#endif
 
 #define LED(port, pin)                                                         \
   (struct led_t) {                                                             \

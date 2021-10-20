@@ -1,6 +1,7 @@
 #+TITLE: IoT sample
 
-* How to compile and run
+* How to
+** Compile and run
 Download project and its submodules.
 #+begin_src sh
 git submodule update --init
@@ -36,6 +37,10 @@ EraseFlash - Sector:0x0 Size:0x8000 2021-10-19T23:15:53 INFO common.c: Flash pag
 2021-10-19T23:15:53 INFO common.c: Starting verification of write complete
 2021-10-19T23:15:53 INFO common.c: Flash written and verified! jolly good!
 #+end_example
+
+** Debug
+Run ~st-util~ in one terminal, after flashing binary to board.
+Run ~arm-none-eabi-gdb~ in other terminal. ~.gdbinit~ file is located at the root of this repo.
 
 * Dependencies
 ** stm32f74xx development files
