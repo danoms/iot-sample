@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "main.h"
 #include "stm32f7xx.h"
+
+#include "main.h"
+#include "utils.h"
 
 #define SYSCLK 16000000
 #define LED_COUNT 9
