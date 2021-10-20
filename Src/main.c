@@ -2,10 +2,9 @@
 #include "stm32f7xx.h"
 
 int main(void) {
-  struct led_t leds[LED_COUNT] = {
-      LED(C, 7), LED(C, 6), LED(G, 6), LED(B, 4), LED(G, 7),
-      LED(I, 0), LED(H, 6), LED(I, 3), LED(I, 2),
-  };
+  struct led_t leds[LED_COUNT] = {LED(G, 6), LED(B, 4),  LED(G, 7),
+                                  LED(I, 0), LED(H, 6),  LED(I, 3),
+                                  LED(I, 2), LED(A, 15), LED(B, 14)};
 
   for (int i = 0; i < LED_COUNT; i++) {
     init_led(&leds[i]);
