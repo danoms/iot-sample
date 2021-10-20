@@ -5,8 +5,9 @@ Download project and its submodules.
 #+begin_src sh
 git submodule update --init
 #+end_src
-To build project run make.
+To build project, download toolchain, add it to path, run make.
 #+begin_src sh :results output
+export PATH=$PATH:/path/to/toolchain/bin
 make
 #+end_src
 
