@@ -14,6 +14,5 @@ struct led_t {
 };
 
 void delay(unsigned int time);
-void led_init(struct led_t *led);
 
 #endif // UTILS_H_

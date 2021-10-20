@@ -8,6 +8,9 @@
 #define LED_COUNT 9
 
 void uart_init(int baudrate);
+void led_init(struct led_t *led);
+void key_init();
+int key_pressed(GPIO_TypeDef *base, int pin);
 
 int uart_prompt(char *prompt) {
   char rxb = '\0';
@@ -52,6 +55,7 @@ int main(void) {
   }
 
   uart_init(115200);
+  key_init();
 
   LOG("-----------------\r\n");
   LOG("Debug on: led train\r\n");
@@ -64,16 +68,29 @@ int main(void) {
   while (1) {
     led_train(leds, go_up, led_train_speed);
 
-    /* LOG("Test pins\n"); */
-    if (key_pressed())
+    LOG("Key: %lx ", GPIOB->IDR);
+    if (key_pressed(GPIOB, 8))
       go_up ^= 1;
-    /* LOG("go_up: %d\n", go_up); */
   }
 
   return 0;
 }
 
-int key_pressed() { return 0; }
+int key_pressed(GPIO_TypeDef *base, int pin) {
+  static int was_pressed = 0;
+  int key_released = base->IDR & (1 << pin);
+  if (!(key_released) && was_pressed) {
+    return 0;
+  } else {
+    was_pressed = 0;
+    if (!(key_released)) {
+      was_pressed = 1;
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+}
 
 void int_to_bin(int num, char *buffer, int size) {
   for (int i = 0; i < size; i++) {
@@ -83,11 +100,11 @@ void int_to_bin(int num, char *buffer, int size) {
       buffer[i] = 0x30;
     }
   }
+  buffer[size] = 0;
 }
 
 void led_train(struct led_t leds[], int go_up, int speed) {
   static unsigned int i = 0;
-  char buffer[LED_COUNT + 1];
 
   int led_current = i % LED_COUNT;
 
@@ -95,6 +112,7 @@ void led_train(struct led_t leds[], int go_up, int speed) {
   delay(speed);
 
 #ifdef DEBUG
+  char buffer[LED_COUNT + 1];
   int leds_state = led_pins_state(leds);
   int_to_bin(leds_state, buffer, LED_COUNT);
 #endif
@@ -163,4 +181,20 @@ void uart_init(int baudrate) {
 
   // usart enable, transfer enable, receive enable
   USART6->CR1 |= (USART_CR1_UE | USART_CR1_TE | USART_CR1_RE);
+}
+
+void led_init(struct led_t *led) {
+  // enable clock for GPIO port
+  SET_BIT(RCC->AHB1ENR, led->ahben_bit);
+
+  // set port pins as output
+  led->base->MODER &= ~(led->moder_mask);
+  led->base->MODER |= led->moder_bit;
+}
+
+void key_init() {
+  RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
+
+  GPIOB->PUPDR &= ~(GPIO_PUPDR_PUPDR8);
+  GPIOB->PUPDR |= GPIO_PUPDR_PUPDR8_0; // pull-up
 }
