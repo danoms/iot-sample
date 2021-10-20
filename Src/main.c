@@ -8,6 +8,39 @@
 
 void uart_init(int baudrate);
 
+int uart_prompt(char *prompt) {
+  char rxb = '\0';
+  char buffer[10];
+  int count = 0;
+  int option = 0;
+
+  printf("%s", prompt);
+  fflush(stdout);
+  while (rxb != 0xD && count < 10) {
+    while (!(USART6->ISR & USART_ISR_RXNE)) {
+    };
+    rxb = USART6->RDR;
+    buffer[count] = rxb;
+    count++;
+
+    printf("%c", rxb);
+    fflush(stdout);
+  }
+  printf("\r\n");
+  option = atoi(buffer);
+  return option;
+}
+
+int led_pins_state(struct led_t leds[]) {
+  int state = 0;
+  for (int i = 0; i < LED_COUNT; i++) {
+    if (leds[i].base->ODR & (1 << leds[i].apin)) {
+      state |= 1 << i;
+    }
+  }
+  return state;
+}
+
 int main(void) {
   struct led_t leds[LED_COUNT] = {LED(G, 6), LED(B, 4),  LED(G, 7),
                                   LED(I, 0), LED(H, 6),  LED(I, 3),
@@ -19,13 +52,16 @@ int main(void) {
 
   uart_init(115200);
 
-  LOG("-----------------\n");
-  LOG("Debug led train\n");
-  LOG("-----------------\n\n");
+  LOG("-----------------\r\n");
+  LOG("Debug on: led train\r\n");
+  LOG("-----------------\r\n\r\n");
+
+  int led_train_speed = uart_prompt("Insert led train speed: ");
+  printf("Led train speed set to: %d\r\n", led_train_speed);
 
   int go_up = 1;
   while (1) {
-    led_train(leds, go_up);
+    led_train(leds, go_up, led_train_speed);
 
     /* LOG("Test pins\n"); */
     if (key_pressed())
@@ -38,13 +74,31 @@ int main(void) {
 
 int key_pressed() { return 0; }
 
-void led_train(struct led_t leds[], int go_up) {
+void int_to_bin(int num, char *buffer, int size) {
+  for (int i = 0; i < size; i++) {
+    if ((num) & (1 << i)) {
+      buffer[i] = 0x31;
+    } else {
+      buffer[i] = 0x30;
+    }
+  }
+}
+
+void led_train(struct led_t leds[], int go_up, int speed) {
   static unsigned int i = 0;
+  char buffer[LED_COUNT + 1];
 
   int led_current = i % LED_COUNT;
 
   leds[led_current].base->BSRR = leds[led_current].set_bit;
-  delay(100);
+  delay(speed);
+
+#ifdef DEBUG
+  int leds_state = led_pins_state(leds);
+  int_to_bin(leds_state, buffer, LED_COUNT);
+#endif
+  LOG("LEDS %d: %s : %x\r\n", led_current, buffer, leds_state);
+
   leds[led_current].base->BSRR = leds[led_current].reset_bit;
 
   if (go_up) {

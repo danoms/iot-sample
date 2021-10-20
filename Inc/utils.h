@@ -10,6 +10,7 @@ struct led_t {
   int moder_bit;
   int set_bit;
   int reset_bit;
+  int apin;
 };
 
 void delay(unsigned int time);
